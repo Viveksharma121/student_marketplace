@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "738167163437",
+    "project_id": "student-marketplace-666c4",
+    "storage_bucket": "student-marketplace-666c4.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:738167163437:android:43c384ddb2b55c239ec6a4",
+        "android_client_info": {
+          "package_name": "com.example.student_marketplace"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyChiJnvoUQTkVHtHDBjHjGLm-47cAoaCmQ"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
