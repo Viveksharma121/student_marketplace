@@ -4,6 +4,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:student_marketplace/models/UserModel.dart';
+import 'package:student_marketplace/screens/departments.dart';
 
 class VerificationScreen extends StatefulWidget {
   final UserModel userModel;
@@ -35,7 +36,6 @@ class _VerificationState extends State<VerificationScreen> {
       await FirebaseFirestore.instance.collection("users").doc(widget.userModel.uid).set(widget.userModel.toMap())
       .then((value) => log("Data added Successfully"));
 
-
     }
 
   }
@@ -61,7 +61,10 @@ class _VerificationState extends State<VerificationScreen> {
                   labelText: "Enter Your Prn Number",
                 ),
               ),
-              const Text("Enter Your Id card image here.")
+              const Text("Enter Your Id card image here."),
+              ElevatedButton(onPressed: (){
+                Navigator.push(context, MaterialPageRoute(builder: (context)=> DepartmentScreen(userModel: widget.userModel, firebaseUser: widget.firebaseUser)));
+              }, child: Text("Go to next Page"))
             ],
           ),
         )

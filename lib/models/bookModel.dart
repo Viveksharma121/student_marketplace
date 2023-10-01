@@ -1,4 +1,5 @@
 class BookModel {
+  String? uid;
   // String? seller;
   String? subjectName;
   String? bookName;
@@ -8,9 +9,10 @@ class BookModel {
   int? semester;
   String? imageUrl;
 
-  BookModel({this.subjectName, this.bookName, this.bookAuthor, this.bookEdition, this.department, this.semester});
+  BookModel({this.subjectName, this.bookName, this.bookAuthor, this.bookEdition, this.department, this.semester, this.imageUrl, this.uid});
 
   BookModel.fromMap(Map<String, dynamic> map){
+    uid = map["uid"];
     // seller = map["sellerid"];
     subjectName = map["subjectname"];
     bookName = map["bookname"];
@@ -23,6 +25,7 @@ class BookModel {
 
   Map<String, dynamic> toMap() {
     return{
+      "uid": uid,
       // "sellerid" : seller,
       "subjectname": subjectName,
       "bookname" : bookName,

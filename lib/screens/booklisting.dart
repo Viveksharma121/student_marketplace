@@ -1,16 +1,18 @@
 import 'dart:core';
 import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:student_marketplace/models/bookModel.dart';
 import 'package:student_marketplace/screens/book_selling.dart';
 
+import '../models/UserModel.dart';
+
 class BookListingScreen extends StatefulWidget {
-  final String subjectName;
-  // final String sellerName;
-  final String department;
-  final int semester;
-  const BookListingScreen({super.key, required this.subjectName, required this.department, required this.semester});
+  final BookModel bookModel;
+  final UserModel userModel;
+  final User firebaseUser;
+  const BookListingScreen({super.key, required this.bookModel, required this.userModel, required this.firebaseUser});
 
   @override
   State<BookListingScreen> createState() => _BookListingScreenState();
@@ -33,8 +35,8 @@ class _BookListingScreenState extends State<BookListingScreen> {
 
     // try{
       QuerySnapshot querySnapshot = await collectionReference
-          .where("subjectname", isEqualTo: widget.subjectName)
-          .where("department", isEqualTo: widget.department)
+          .where("subjectname", isEqualTo: widget.bookModel.subjectName)
+          .where("department", isEqualTo: widget.bookModel.department)
           .get();
 
       for(QueryDocumentSnapshot doc in querySnapshot.docs){
@@ -80,15 +82,19 @@ class _BookListingScreenState extends State<BookListingScreen> {
                             //   title: Text(book.bookName ?? ''),
                             //   subtitle: Text(book.bookAuthor ?? ''),
                             // );
-                            return Column(
-                              children: [
-                                const SizedBox(height: 50),
-                                Container(
-                                  decoration: BoxDecoration(
-                                    shape: BoxShape.rectangle,
-                                    border: Border.all(color: Colors.black)
+                            return Container(
+                              decoration: BoxDecoration(
+                                  shape: BoxShape.rectangle,
+                                  border: Border.all(color: Colors.black)
+                              ),
+                              child: Column(
+                                children: [
+                                  Container(
+                                    height: 100,
+                                    width: 100,
+                                    child: Image.network("${book.imageUrl}"),
                                   ),
-                                  child: Column(
+                                  Column(
                                     children: [
                                       Text("Book Name: ${book.bookName ?? ' '}"),
                                       Text("Author: ${book.bookAuthor ?? ' '}"),
@@ -96,8 +102,8 @@ class _BookListingScreenState extends State<BookListingScreen> {
                                       ElevatedButton(onPressed: (){}, child: const Text("Chat with Seller"))
                                     ],
                                   ),
-                                ),
-                              ],
+                                ],
+                              ),
                             );
                           }
                       )
@@ -108,10 +114,10 @@ class _BookListingScreenState extends State<BookListingScreen> {
           ElevatedButton(onPressed: (){
             Navigator.push(
                 context,
-                MaterialPageRoute(builder: (context)=> BookSellingScreen(subjectName: widget.subjectName, department: widget.department, semester: widget.semester)
+                MaterialPageRoute(builder: (context)=> BookSellingScreen(bookModel: widget.bookModel, firebaseUser: widget.firebaseUser, userModel: widget.userModel)
                 ));
             }
-          , child: Text("Sell a Book")
+          , child: const Text("Sell a Book")
           ),
         ],
       )

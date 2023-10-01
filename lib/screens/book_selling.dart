@@ -1,17 +1,21 @@
 import 'dart:developer';
-
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_database/firebase_database.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
-
+import 'dart:io';
+import 'package:image_picker/image_picker.dart';
+import 'package:uuid/uuid.dart';
+import '../models/UserModel.dart';
 import '../models/bookModel.dart';
 
 class BookSellingScreen extends StatefulWidget {
-  final String subjectName;
-  // final String sellerName;
-  final String department;
-  final int semester;
-  const BookSellingScreen({super.key, required this.subjectName, required this.department, required this.semester});
+  final BookModel bookModel;
+  final UserModel userModel;
+  final User firebaseUser;
+  const BookSellingScreen({super.key, required this.bookModel, required this.userModel, required this.firebaseUser});
 
   @override
   State<BookSellingScreen> createState() => _BookSellingScreenState();
@@ -23,6 +27,44 @@ class _BookSellingScreenState extends State<BookSellingScreen> {
   TextEditingController bookEditionController = TextEditingController();
   TextEditingController authorNameController = TextEditingController();
 
+  File? imageFile;
+  Future selectImage (ImageSource source) async{
+    final pickedFile = await ImagePicker().pickImage(source: source); // ImagePicker returns an Xfile
+    log("Image Picked Successfully");
+    if(pickedFile!=null){
+      imageFile = File(pickedFile.path);
+    }
+  }
+
+  void showPhotoOptions () {
+    showDialog(context: context, builder: (context){
+      return AlertDialog(
+        title: const Text("Upload Profile Picture"),
+        content: Column(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            ListTile(
+              leading: const Icon(Icons.photo),
+              title: const Text("Select from Gallery"),
+              onTap: () {
+                Navigator.pop(context);
+                selectImage(ImageSource.gallery);
+              },
+            ),
+            ListTile(
+              leading: const Icon(Icons.camera_alt_outlined),
+              title: const Text("Take a Photo"),
+              onTap: () {
+                Navigator.pop(context);
+                selectImage(ImageSource.camera);
+              },
+            ),
+          ],
+        ),
+      );
+    });
+  }
+
   void sell () async {
 
     try{
@@ -30,14 +72,30 @@ class _BookSellingScreenState extends State<BookSellingScreen> {
       String bookEdition = bookEditionController.text.trim();
       String authorName = authorNameController.text.trim();
 
+      String uid = const Uuid().v1();
       BookModel newBookModel = BookModel(
-          subjectName: widget.subjectName,
+          uid: uid,
+          subjectName: widget.bookModel.subjectName,
           bookName: bookName,
           bookAuthor: authorName,
           bookEdition: bookEdition,
-          department: widget.department,
-          semester: widget.semester
+          department: widget.bookModel.department,
+          semester: widget.bookModel.semester,
+          imageUrl: ""
       );
+
+      if(imageFile!=null){
+        UploadTask uploadTask = FirebaseStorage.instance.ref('book-pictures').child(newBookModel.uid.toString()).putFile(imageFile!);
+        TaskSnapshot taskSnapshot = await uploadTask;
+
+        String? imageUrl = await taskSnapshot.ref.getDownloadURL();
+
+        // widget.userModel.profilepic = imageUrl;
+        newBookModel.imageUrl = imageUrl;
+      }
+      else{
+        log("Please upload an image of your book.");
+      }
 
       CollectionReference booksCollection = FirebaseFirestore.instance.collection("books");
       await booksCollection.add(newBookModel.toMap());
@@ -47,7 +105,6 @@ class _BookSellingScreenState extends State<BookSellingScreen> {
       log("Error adding Data: $e");
     }
   }
-
 
   @override
   Widget build(BuildContext context) {
@@ -85,6 +142,7 @@ class _BookSellingScreenState extends State<BookSellingScreen> {
                   icon: Icon(Icons.book)
               ),
             ),
+            ElevatedButton(onPressed: (){showPhotoOptions();}, child: const Text("Pic of the Book.")),
             ElevatedButton(onPressed: (){sell();}, child: const Text("Sell Book"))
           ],
         ),

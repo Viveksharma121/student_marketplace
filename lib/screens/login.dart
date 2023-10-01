@@ -43,6 +43,8 @@ class _LoginPageState extends State<LoginScreen> {
 
       Navigator.push(context, MaterialPageRoute(
           builder: (context) => VerificationScreen(firebaseUser: userCredential!.user!, userModel: userModel)));
+
+      // Navigator.push(context, MaterialPageRoute(builder: (context)=>HomePage()));
     }
     }
 

@@ -1,8 +1,16 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:student_marketplace/models/bookModel.dart';
 import 'package:student_marketplace/screens/booklisting.dart';
+import 'package:uuid/uuid.dart';
+
+import '../models/UserModel.dart';
 
 class CompsDepartmentScreen extends StatefulWidget {
-  const CompsDepartmentScreen({super.key});
+  final UserModel userModel;
+  final User firebaseUser;
+  const CompsDepartmentScreen({super.key, required this.userModel, required this.firebaseUser});
 
   @override
   State<CompsDepartmentScreen> createState() => _CompsDepartmentScreenState();
@@ -35,88 +43,88 @@ class _CompsDepartmentScreenState extends State<CompsDepartmentScreen> {
           Text("Sem ${sems[0]} Subjects",),
             const SizedBox(height: 25),
 
-            Subject(subjectName: sem3[0], sem: 3, imageUrl: "assets/images/departments/fy.png"),
+            Subject(subjectName: sem3[0], sem: 3, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 40),
-              Subject(subjectName: sem3[1], sem: 3, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem3[1], sem: 3, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 40),
-              Subject(subjectName: sem3[2], sem: 3, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem3[2], sem: 3, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 40),
-              Subject(subjectName: sem3[3], sem: 3, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem3[3], sem: 3, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 40),
-              Subject(subjectName: sem3[4], sem: 3, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem3[4], sem: 3, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 40),
-              Subject(subjectName: sem3[5], sem: 3, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem3[5], sem: 3, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 80),
 
               Text("Sem ${sems[1]} Subjects"),
               const SizedBox(height: 25),
-              Subject(subjectName: sem4[0], sem: 4, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem4[0], sem: 4, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 40),
-              Subject(subjectName: sem4[1], sem: 4, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem4[1], sem: 4, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 40),
-              Subject(subjectName: sem4[2], sem: 4, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem4[2], sem: 4, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 40),
-              Subject(subjectName: sem4[3], sem: 4, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem4[3], sem: 4, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 40),
-              Subject(subjectName: sem4[4], sem: 4, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem4[4], sem: 4, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 40),
-              Subject(subjectName: sem4[5], sem: 4, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem4[5], sem: 4, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 80),
 
               Text("Sem ${sems[2]} Subjects"),
-              Subject(subjectName: sem5[0], sem: 5, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem5[0], sem: 5, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 40),
-              Subject(subjectName: sem5[1], sem: 5, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem5[1], sem: 5, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 40),
-              Subject(subjectName: sem5[2], sem: 5, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem5[2], sem: 5, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 40),
-              Subject(subjectName: sem5[3], sem: 5, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem5[3], sem: 5, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 40),
-              Subject(subjectName: sem5[4], sem: 5, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem5[4], sem: 5, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 40),
-              Subject(subjectName: sem5[5], sem: 5, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem5[5], sem: 5, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 80),
 
               Text("Sem ${sems[3]} Subjects"),
-              Subject(subjectName: sem6[0], sem: 5, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem6[0], sem: 5, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 40),
-              Subject(subjectName: sem6[1], sem: 5, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem6[1], sem: 5, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 40),
-              Subject(subjectName: sem6[2], sem: 5, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem6[2], sem: 5, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 40),
-              Subject(subjectName: sem6[3], sem: 5, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem6[3], sem: 5, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 40),
-              Subject(subjectName: sem6[4], sem: 5, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem6[4], sem: 5, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 40),
-              Subject(subjectName: sem6[5], sem: 5, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem6[5], sem: 5, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 80),
 
               Text("Sem ${sems[4]} Subjects"),
-              Subject(subjectName: sem7[0], sem: 5, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem7[0], sem: 5, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 40),
-              Subject(subjectName: sem7[1], sem: 5, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem7[1], sem: 5, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 40),
-              Subject(subjectName: sem7[2], sem: 5, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem7[2], sem: 5, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 40),
-              Subject(subjectName: sem7[3], sem: 5, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem7[3], sem: 5, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 40),
-              Subject(subjectName: sem7[4], sem: 5, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem7[4], sem: 5, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 40),
-              Subject(subjectName: sem7[5], sem: 5, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem7[5], sem: 5, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 80),
 
               Text("Sem ${sems[5]} Subjects"),
-              Subject(subjectName: sem8[0], sem: 5, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem8[0], sem: 5, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 40),
-              Subject(subjectName: sem8[1], sem: 5, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem8[1], sem: 5, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 40),
-              Subject(subjectName: sem8[2], sem: 5, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem8[2], sem: 5, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 40),
-              Subject(subjectName: sem8[3], sem: 5, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem8[3], sem: 5, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 40),
-              Subject(subjectName: sem8[4], sem: 5, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem8[4], sem: 5, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 40),
-              Subject(subjectName: sem8[5], sem: 5, imageUrl: "assets/images/departments/fy.png"),
+              Subject(subjectName: sem8[5], sem: 5, imageUrl: "assets/images/departments/fy.png", userModel: widget.userModel, firebaseUser: widget.firebaseUser,),
               const SizedBox(height: 80),
 
 
@@ -132,20 +140,43 @@ class Subject extends StatefulWidget {
   final String subjectName;
   final int sem;
   final String imageUrl;
-  const Subject({super.key, required this.subjectName, required this.sem, required this.imageUrl});
+  final UserModel userModel;
+  final User firebaseUser;
+  const Subject({super.key, required this.subjectName, required this.sem, required this.imageUrl, required this.userModel, required this.firebaseUser});
 
   @override
   State<Subject> createState() => _SubjectState();
 }
 
 class _SubjectState extends State<Subject> {
+
+  late BookModel newBookModel;
+
+  @override
+  void initState() {
+    super.initState();
+
+    // Initialize newBookModel here using widget properties
+    newBookModel = BookModel(
+      uid: "",
+      subjectName: widget.subjectName,
+      department: "Comps",
+      semester: widget.sem,
+      bookEdition: "",
+      bookAuthor: "",
+      bookName: "",
+      imageUrl: "",
+    );
+  }
+
+
   @override
   Widget build(BuildContext context) {
     double deviceWidth = MediaQuery.of(context).size.width;
     return
       InkWell(
         onTap: () {
-          Navigator.push(context, MaterialPageRoute(builder: (context)=>BookListingScreen(subjectName: widget.subjectName, department: "Comps", semester: widget.sem)));
+          Navigator.push(context, MaterialPageRoute(builder: (context)=>BookListingScreen(bookModel: newBookModel, firebaseUser: widget.firebaseUser, userModel: widget.userModel)));
         },
         child: Container(
           height: 60,

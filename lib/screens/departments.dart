@@ -1,9 +1,13 @@
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:student_marketplace/screens/comps.dart';
+import '../models/UserModel.dart';
 import 'login.dart';
 
 class DepartmentScreen extends StatefulWidget {
-  const DepartmentScreen({super.key});
+  final UserModel userModel;
+  final User firebaseUser;
+  const DepartmentScreen({super.key, required this.userModel, required this.firebaseUser});
 
   @override
   State<DepartmentScreen> createState() => _DepartmentScreenState();
@@ -30,17 +34,17 @@ class _DepartmentScreenState extends State<DepartmentScreen> {
                   style: TextStyle(fontWeight: FontWeight.bold, fontSize: 25),
                 ),
                 const SizedBox(height: 50),
-                Department(department: arr[0], imageUrl: "assets/images/departments/fy.png"),
+                Department(department: arr[0], imageUrl: "assets/images/departments/fy.png", firebaseUser: widget.firebaseUser, userModel: widget.userModel),
                 const SizedBox(height: 50),
-                Department(department: arr[1], imageUrl: "assets/images/departments/comp.jpg"),
+                Department(department: arr[1], imageUrl: "assets/images/departments/comp.jpg", firebaseUser: widget.firebaseUser, userModel: widget.userModel),
                 const SizedBox(height: 50),
-                Department(department: arr[2], imageUrl: "assets/images/departments/it.jpg"),
+                Department(department: arr[2], imageUrl: "assets/images/departments/it.jpg", firebaseUser: widget.firebaseUser, userModel: widget.userModel),
                 const SizedBox(height: 50),
-                Department(department: arr[3], imageUrl: "assets/images/departments/aids.jpg"),
+                Department(department: arr[3], imageUrl: "assets/images/departments/aids.jpg", firebaseUser: widget.firebaseUser, userModel: widget.userModel),
                 const SizedBox(height: 50),
-                Department(department: arr[4], imageUrl: "assets/images/departments/extc.jpg"),
+                Department(department: arr[4], imageUrl: "assets/images/departments/extc.jpg", firebaseUser: widget.firebaseUser, userModel: widget.userModel),
                 const SizedBox(height: 50),
-                Department(department: arr[5], imageUrl: "assets/images/departments/chem.jpg"),
+                Department(department: arr[5], imageUrl: "assets/images/departments/chem.jpg", firebaseUser: widget.firebaseUser, userModel: widget.userModel),
                 const SizedBox(height: 50),
               ],
             ),
@@ -54,7 +58,9 @@ class _DepartmentScreenState extends State<DepartmentScreen> {
 class Department extends StatefulWidget {
   final String department;
   final String imageUrl;
-  const Department({super.key, required this.department, required this.imageUrl});
+  final UserModel userModel;
+  final User firebaseUser;
+  const Department({super.key, required this.department, required this.imageUrl, required this.userModel, required this.firebaseUser});
 
   @override
   State<Department> createState() => _DepartmentState();
@@ -68,7 +74,7 @@ class _DepartmentState extends State<Department> {
 
     return InkWell(
       onTap: (){
-        Navigator.push(context, MaterialPageRoute(builder: (context)=>const CompsDepartmentScreen()));
+        Navigator.push(context, MaterialPageRoute(builder: (context)=> CompsDepartmentScreen(userModel: widget.userModel, firebaseUser: widget.firebaseUser)));
       },
       child: Container(
         height: 150,
