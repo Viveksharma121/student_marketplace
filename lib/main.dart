@@ -2,6 +2,7 @@ import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:student_marketplace/screens/comps.dart';
 import 'package:student_marketplace/screens/departments.dart';
+import 'package:student_marketplace/screens/homepage.dart';
 import 'package:student_marketplace/screens/login.dart';
 import 'package:student_marketplace/screens/signup.dart';
 import 'package:student_marketplace/screens/verification.dart';

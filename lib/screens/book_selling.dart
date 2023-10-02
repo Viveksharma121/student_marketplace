@@ -26,6 +26,8 @@ class _BookSellingScreenState extends State<BookSellingScreen> {
   TextEditingController bookNameController = TextEditingController();
   TextEditingController bookEditionController = TextEditingController();
   TextEditingController authorNameController = TextEditingController();
+  TextEditingController priceController = TextEditingController();
+  TextEditingController descriptionController = TextEditingController();
 
   File? imageFile;
   Future selectImage (ImageSource source) async{
@@ -71,14 +73,20 @@ class _BookSellingScreenState extends State<BookSellingScreen> {
       String bookName = bookNameController.text.trim();
       String bookEdition = bookEditionController.text.trim();
       String authorName = authorNameController.text.trim();
+      String price = priceController.text.trim();
+      String description = descriptionController.text.trim();
 
       String uid = const Uuid().v1();
       BookModel newBookModel = BookModel(
           uid: uid,
+          sellerId: widget.firebaseUser.uid,
+          sellerName: widget.userModel.fullName.toString(),
           subjectName: widget.bookModel.subjectName,
           bookName: bookName,
           bookAuthor: authorName,
           bookEdition: bookEdition,
+          bookPrice: price,
+          description: description,
           department: widget.bookModel.department,
           semester: widget.bookModel.semester,
           imageUrl: ""
@@ -117,7 +125,7 @@ class _BookSellingScreenState extends State<BookSellingScreen> {
         padding: const EdgeInsets.all(20),
         child: Column(
           children: [
-            CupertinoButton(onPressed: (){}, borderRadius: BorderRadius.circular(10), child: const Icon(Icons.book)),
+            // CupertinoButton(onPressed: (){}, borderRadius: BorderRadius.circular(10), child: const Icon(Icons.book)),
             const SizedBox(height: 10),
             TextField(
               controller: bookNameController,
@@ -140,6 +148,22 @@ class _BookSellingScreenState extends State<BookSellingScreen> {
               decoration: const InputDecoration(
                   labelText: "Enter Author Name",
                   icon: Icon(Icons.book)
+              ),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: priceController,
+              decoration: const InputDecoration(
+                  labelText: "Enter Book Price",
+                  icon: Icon(Icons.currency_rupee)
+              ),
+            ),
+            const SizedBox(height: 10),
+            TextField(
+              controller: descriptionController,
+              decoration: const InputDecoration(
+                  labelText: "Enter Description",
+                  icon: Icon(Icons.description)
               ),
             ),
             ElevatedButton(onPressed: (){showPhotoOptions();}, child: const Text("Pic of the Book.")),

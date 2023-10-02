@@ -159,6 +159,8 @@ class _SubjectState extends State<Subject> {
     // Initialize newBookModel here using widget properties
     newBookModel = BookModel(
       uid: "",
+      sellerId: widget.firebaseUser.uid,
+      sellerName: widget.userModel.fullName,
       subjectName: widget.subjectName,
       department: "Comps",
       semester: widget.sem,

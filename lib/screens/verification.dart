@@ -27,17 +27,20 @@ class _VerificationState extends State<VerificationScreen> {
 
     UserCredential? userCredential;
 
-    if(userCredential!=null) {
-      String uid = userCredential.user!.uid;
+    // if(userCredential!=null) {
+    //   String uid = userCredential.user!.uid;
 
+      // widget.userModel.uid = widget.firebaseUser.uid;
       widget.userModel.fullName = name;
       widget.userModel.prn = prn;
+
+      log(widget.userModel.fullName.toString());
       
       await FirebaseFirestore.instance.collection("users").doc(widget.userModel.uid).set(widget.userModel.toMap())
       .then((value) => log("Data added Successfully"));
 
-    }
-
+    // }
+    Navigator.push(context, MaterialPageRoute(builder: (context)=> DepartmentScreen(userModel: widget.userModel, firebaseUser: widget.firebaseUser)));
   }
 
   @override
@@ -63,8 +66,8 @@ class _VerificationState extends State<VerificationScreen> {
               ),
               const Text("Enter Your Id card image here."),
               ElevatedButton(onPressed: (){
-                Navigator.push(context, MaterialPageRoute(builder: (context)=> DepartmentScreen(userModel: widget.userModel, firebaseUser: widget.firebaseUser)));
-              }, child: Text("Go to next Page"))
+                getUserDetailsAndPutIntoUserModel();
+              }, child: const Text("Go to next Page"))
             ],
           ),
         )

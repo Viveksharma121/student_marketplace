@@ -99,6 +99,8 @@ class _BookListingScreenState extends State<BookListingScreen> {
                                       Text("Book Name: ${book.bookName ?? ' '}"),
                                       Text("Author: ${book.bookAuthor ?? ' '}"),
                                       Text("Edition: ${book.bookEdition ?? ' '}"),
+                                      Text("Price: ${book.bookPrice ?? ' '}"),
+                                      Text("Description: ${book.description ?? ' '}"),
                                       ElevatedButton(onPressed: (){}, child: const Text("Chat with Seller"))
                                     ],
                                   ),
