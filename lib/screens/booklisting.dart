@@ -1,25 +1,30 @@
-import 'dart:core';
-import 'dart:developer';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:student_marketplace/models/bookModel.dart';
+import 'package:student_marketplace/screens/bookDetails.dart';
 import 'package:student_marketplace/screens/book_selling.dart';
-
+import 'package:student_marketplace/screens/homepage.dart';
 import '../models/UserModel.dart';
+import 'package:share_plus/share_plus.dart';
 
 class BookListingScreen extends StatefulWidget {
   final BookModel bookModel;
   final UserModel userModel;
   final User firebaseUser;
-  const BookListingScreen({super.key, required this.bookModel, required this.userModel, required this.firebaseUser});
+
+  const BookListingScreen({
+    Key? key,
+    required this.bookModel,
+    required this.userModel,
+    required this.firebaseUser,
+  }) : super(key: key);
 
   @override
   State<BookListingScreen> createState() => _BookListingScreenState();
 }
 
 class _BookListingScreenState extends State<BookListingScreen> {
-
   late Future<List<BookModel>> _books;
 
   @override
@@ -29,101 +34,172 @@ class _BookListingScreenState extends State<BookListingScreen> {
   }
 
   Future<List<BookModel>> listBooks() async {
+    CollectionReference collectionReference =
+        FirebaseFirestore.instance.collection("books");
+    List<BookModel> books = [];
 
-    CollectionReference collectionReference = FirebaseFirestore.instance.collection("books");
-    List<BookModel> books=[];
+    QuerySnapshot querySnapshot = await collectionReference
+        .where("subjectname", isEqualTo: widget.bookModel.subjectName)
+        .where("department", isEqualTo: widget.bookModel.department)
+        .get();
 
-    // try{
-      QuerySnapshot querySnapshot = await collectionReference
-          .where("subjectname", isEqualTo: widget.bookModel.subjectName)
-          .where("department", isEqualTo: widget.bookModel.department)
-          .get();
+    for (QueryDocumentSnapshot doc in querySnapshot.docs) {
+      BookModel book = BookModel.fromMap(doc.data() as Map<String, dynamic>);
+      books.add(book);
+    }
 
-      for(QueryDocumentSnapshot doc in querySnapshot.docs){
-        BookModel book = BookModel.fromMap(doc.data() as Map<String, dynamic>);
-        books.add(book);
-      }
-
-      return books;
-    // }
-    // catch(e){
-    //   log("Error retrieving data: $e");
-    // }
+    return books;
   }
 
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
-        title: const Text("Books List"),
+        title: Text("Books List"),
         centerTitle: true,
       ),
       body: Column(
         children: [
-          FutureBuilder(
+          Expanded(
+            child: FutureBuilder(
               future: _books,
-              builder: (context, snapshot){
-                if (snapshot.connectionState == ConnectionState.waiting){
-                  return const CircularProgressIndicator();
-                }
-                else if (snapshot.hasError){
-                  return Text("Error displaying data: ${snapshot.error}");
-                }
-                else if (snapshot.hasData && snapshot.data!.isEmpty){
-                  return const Text("No Books yet.");
-                }
-                else{
-                  return Expanded(
-                      child: ListView.builder(
-                          itemCount: snapshot.data!.length,
-                          itemBuilder: (context, index){
-                            BookModel book = snapshot.data![index];
-                            // return ListTile(
-                            //   title: Text(book.bookName ?? ''),
-                            //   subtitle: Text(book.bookAuthor ?? ''),
-                            // );
-                            return Container(
-                              decoration: BoxDecoration(
-                                  shape: BoxShape.rectangle,
-                                  border: Border.all(color: Colors.black)
-                              ),
-                              child: Column(
-                                children: [
-                                  Container(
-                                    height: 100,
-                                    width: 100,
-                                    child: Image.network("${book.imageUrl}"),
+              builder: (context, snapshot) {
+                if (snapshot.connectionState == ConnectionState.waiting) {
+                  return Center(
+                    child: CircularProgressIndicator(),
+                  );
+                } else if (snapshot.hasError) {
+                  return Center(
+                    child: Text(
+                      "Error displaying data: ${snapshot.error}",
+                      style: TextStyle(color: Colors.red),
+                    ),
+                  );
+                } else if (snapshot.hasData && snapshot.data!.isEmpty) {
+                  return Center(
+                    child: Text(
+                      "No Books yet.",
+                      style: TextStyle(fontSize: 18),
+                    ),
+                  );
+                } else {
+                  return ListView.builder(
+                    itemCount: snapshot.data!.length,
+                    itemBuilder: (context, index) {
+                      BookModel book = snapshot.data![index];
+                      return GestureDetector(
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                                builder: (context) =>
+                                    BookDetailScreen(book: book)),
+                          );
+                        },
+                        child: Card(
+                          elevation: 3,
+                          margin: EdgeInsets.all(10),
+                          child: Column(
+                            children: [
+                              AspectRatio(
+                                aspectRatio: 16 / 9,
+                                child: Container(
+                                  decoration: BoxDecoration(
+                                    image: DecorationImage(
+                                      image: NetworkImage("${book.imageUrl}"),
+                                      fit: BoxFit.cover,
+                                    ),
                                   ),
-                                  Column(
-                                    children: [
-                                      Text("Book Name: ${book.bookName ?? ' '}"),
-                                      Text("Author: ${book.bookAuthor ?? ' '}"),
-                                      Text("Edition: ${book.bookEdition ?? ' '}"),
-                                      Text("Price: ${book.bookPrice ?? ' '}"),
-                                      Text("Description: ${book.description ?? ' '}"),
-                                      ElevatedButton(onPressed: (){}, child: const Text("Chat with Seller"))
-                                    ],
+                                ),
+                              ),
+                              SizedBox(height: 10),
+                              Padding(
+                                padding: const EdgeInsets.all(12.0),
+                                child: Row(
+                                  mainAxisAlignment:
+                                      MainAxisAlignment.spaceBetween,
+                                  children: [
+                                    Text(
+                                      "Book Name: ${book.bookName ?? ' '}",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 20,
+                                      ),
+                                    ),
+                                    Text(
+                                      "Price: ${book.bookPrice ?? ' '}",
+                                      style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        fontSize: 16,
+                                        color: Colors.green,
+                                      ),
+                                    ),
+                                  ],
+                                ),
+                              ),
+                              // SizedBox(height: ),
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  ElevatedButton(
+                                    onPressed: () {
+                                      Navigator.push(
+                                        context,
+                                        MaterialPageRoute(
+                                          builder: (context) => HomePage(),
+                                        ),
+                                      );
+                                    },
+                                    child: Text("Chat with Seller"),
+                                  ),
+                                  SizedBox(
+                                    width: 96.0,
+                                    child: GestureDetector(
+                                      onTap: () {
+                                        //share
+                                      },
+                                      child: Icon(
+                                        Icons.share,
+                                        color: Colors.blue,
+                                      ),
+                                    ),
                                   ),
                                 ],
                               ),
-                            );
-                          }
-                      )
+                            ],
+                          ),
+                        ),
+                      );
+                    },
                   );
                 }
-              }
+              },
+            ),
           ),
-          ElevatedButton(onPressed: (){
-            Navigator.push(
-                context,
-                MaterialPageRoute(builder: (context)=> BookSellingScreen(bookModel: widget.bookModel, firebaseUser: widget.firebaseUser, userModel: widget.userModel)
-                ));
-            }
-          , child: const Text("Sell a Book")
+          Padding(
+            padding: const EdgeInsets.all(20.0),
+            child: ElevatedButton(
+              onPressed: () {
+                Navigator.push(
+                  context,
+                  MaterialPageRoute(
+                    builder: (context) => BookSellingScreen(
+                      bookModel: widget.bookModel,
+                      firebaseUser: widget.firebaseUser,
+                      userModel: widget.userModel,
+                    ),
+                  ),
+                );
+              },
+              child: Text(
+                "Sell a Book",
+                style: TextStyle(fontSize: 18),
+              ),
+            ),
           ),
         ],
-      )
-
+      ),
     );
   }
 }
